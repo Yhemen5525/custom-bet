@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    input {
+      width: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div id="dead-games">
+    <table>
+      <thead>
+    <tr>
+      <th>Game#</th>
+      <th>Stake</th>
+      <th>Odd</th>
+      <th>Outcome</th>
+      <th>Profit</th>
+    </tr>
+  </thead>
+      <tbody id="tbody">
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>pending</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+    </table>    
+  </div>
+  <div id="display">
+  </div>
+  <div >
+      <h3>controls</h3>
+      <div>
+        nextStake 
+        <input id="nextStake_input" type="text" placeholder="2,4,3" />
+        <button onclick="setNextStakeFromInput()">set nextStake</button>
+      </div>
+      <hr>
+      <button onclick="stake()">stake</button>
+      <hr>
+      <button onclick="won()">won</button>
+      <button onclick="lost()">lost</button>
+      <hr>
+      <div>
+        set new Odd
+        <input id="newOdd-input" type="text" placeholder="2.0"/>
+        <button onclick="setNewOdd()">set set new odd</button>
+      </div>
+    </div>
+  <script src="./main.js"></script>
+</body>
+</html>
