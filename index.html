@@ -9,9 +9,28 @@
     input {
       width: 50px;
     }
+    #info-box-1{
+      display: flex;
+      justify-content: space-between  ;
+    }
+    #units-display{
+      width: 80;
+      text-align: center;
+      border: 1px solid black;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .form-element {
+      color: green;
+      margin: 5px;
+    }
   </style>
 </head>
 <body>
+  <div id="info-box-1" >
+    <div>Initial units : <span id="initial-units"></span> </div>
+    <div>Target profit : <span id="target-profit-display">0</span> </div>
+  </div>
   <div id="dead-games">
     <table>
       <thead>
@@ -34,11 +53,15 @@
   </tbody>
     </table>    
   </div>
+  <div id="units-display">1,2,3,4,5</div>
+  <div>NextStake : <span> 14</span></div>
+  
+  <hr>
   <div id="display">
   </div>
   <div >
       <h3>controls</h3>
-      <div>
+      <div class="form-element">
         nextStake 
         <input id="nextStake_input" type="text" placeholder="2,4,3" />
         <button onclick="setNextStakeFromInput()">set nextStake</button>
@@ -49,11 +72,19 @@
       <button onclick="won()">won</button>
       <button onclick="lost()">lost</button>
       <hr>
-      <div>
+      <div class="form-element">
         set new Odd
         <input id="newOdd-input" type="text" placeholder="2.0"/>
         <button onclick="setNewOdd()">set set new odd</button>
       </div>
+      <div class="form-element">
+        ggg
+        <input id="initial-stake-input" type="text" value="1,2,3" placeholder="1,2,2,3,4,5"/>
+        <button onclick="setInitialUnits()">set initial units</button>
+      </div>
+      
+      <hr>
+      <button onclick="removeData()">reset/clear data</button>
     </div>
   <script src="./main.js"></script>
 </body>

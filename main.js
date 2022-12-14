@@ -4,11 +4,17 @@ const display_dom = document.querySelector("#display");
 const nextStake_input = document.querySelector("#nextStake_input");
 const tbody = document.querySelector("#tbody");
 const newOddInput = document.querySelector("#newOdd-input");
+const initialUnits_dom = document.querySelector("#initial-units");
+const initialUnits_input = document.querySelector("#initial-stake-input");
+const targetProfitDisplay = document.querySelector("#target-profit-display");
 
 let data = getSavedData();
+console.log(data);
 
 let odd = data ? data.odd : 2;
-let units = data && data.units.length > 0 ? data.units : [1, 2, 2, 3, 4, 5];
+let initialUnits =
+  data && data.initialUnits.length > 0 ? data.initialUnits : [1, 2, 2, 3, 4, 5];
+let units = data && data.units.length > 0 ? data.units : [...initialUnits];
 let nextStake = data ? data.nextStake : 0;
 let isBetStaked = data ? data.isBetStaked : false;
 let gameOutcome = data ? data.gameOutcome : "";
@@ -18,10 +24,7 @@ let wonGames = data && data.wonGames.length > 0 ? data.wonGames : [];
 let lostGames = data && data.lostGames.length > 0 ? data.lostGames : [];
 let deadGames = data && data.deadGames.length > 0 ? data.deadGames : [];
 let profit = data ? data.profit : 0;
-
-console.log(deadGames);
-
-// debugger;
+let targetProfit = 0;
 
 function setNextStakeFromInput() {
   const values = nextStake_input.value.split(",");
@@ -121,6 +124,10 @@ function calcProfit() {
   return odd * totalWonStakes - totalStakes;
 }
 
+function getTargetProfit() {
+  return getArraySum(initialUnits);
+}
+
 function getTotalStakeAmounts(games) {
   games = [...games];
   let sum = 0;
@@ -152,6 +159,30 @@ function setNewOdd() {
   render();
 }
 
+function setInitialUnits() {
+  if (!(deadGames.length < 1)) {
+    alert(
+      "sorry, you have an on going bet, can't reassign unitialUnits now. clear data and try again"
+    );
+    return;
+  }
+
+  let values = initialUnits_input.value;
+  values = values.split(",");
+
+  let arrayOfNumbers = values.map((value) => {
+    return value * 1;
+  });
+  values = arrayOfNumbers;
+  initialUnits = values;
+  initialUnits_dom.innerText = values;
+  targetProfitDisplay.innerText = getTargetProfit();
+
+  units = initialUnits;
+  saveData();
+  render();
+}
+
 function render() {
   tbody.innerHTML = "";
   display_dom.innerText = JSON.stringify({
@@ -165,8 +196,6 @@ function render() {
     profit,
   });
 
-  console.log(deadGames);
-
   let content = "";
   deadGames.forEach((deadGame, index) => {
     content += `<tr>
@@ -179,6 +208,9 @@ function render() {
   });
 
   tbody.innerHTML = content;
+
+  initialUnits_dom.innerText = initialUnits;
+  targetProfitDisplay.innerText = getTargetProfit();
 }
 render();
 
@@ -221,6 +253,7 @@ function isString(str) {
 function saveData() {
   let data = {
     odd,
+    initialUnits,
     units,
     nextStake,
     isBetStaked,
@@ -245,4 +278,9 @@ function getSavedData() {
   } else {
     return undefined;
   }
+}
+
+function removeData() {
+  localStorage.removeItem("customBetdata");
+  location.reload();
 }
