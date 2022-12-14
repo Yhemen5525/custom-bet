@@ -9,7 +9,7 @@ const initialUnits_input = document.querySelector("#initial-stake-input");
 const targetProfitDisplay = document.querySelector("#target-profit-display");
 
 let data = getSavedData();
-console.log(data);
+// console.log(data);
 
 let odd = data ? data.odd : 2;
 let initialUnits =
