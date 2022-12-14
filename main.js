@@ -156,7 +156,8 @@ function setNewOdd() {
   } else {
     alert("sorry,can't new odd ,you have an online bet");
   }
-  render();
+  saveData();
+  location.reload();
 }
 
 function setInitialUnits() {
@@ -180,7 +181,7 @@ function setInitialUnits() {
 
   units = initialUnits;
   saveData();
-  render();
+  location.reload();
 }
 
 function render() {
