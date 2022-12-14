@@ -1,91 +1,96 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <style>
-    input {
-      width: 50px;
-    }
-    #info-box-1{
-      display: flex;
-      justify-content: space-between  ;
-    }
-    #units-display{
-      width: 80;
-      text-align: center;
-      border: 1px solid black;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .form-element {
-      color: green;
-      margin: 5px;
-    }
-  </style>
-</head>
-<body>
-  <div id="info-box-1" >
-    <div>Initial units : <span id="initial-units"></span> </div>
-    <div>Target profit : <span id="target-profit-display">0</span> </div>
-  </div>
-  <div id="dead-games">
-    <table>
-      <thead>
-    <tr>
-      <th>Game#</th>
-      <th>Stake</th>
-      <th>Odd</th>
-      <th>Outcome</th>
-      <th>Profit</th>
-    </tr>
-  </thead>
-      <tbody id="tbody">
-    <tr>
-      <td>1</td>
-      <td>2</td>
-      <td>2</td>
-      <td>pending</td>
-      <td>0</td>
-    </tr>
-  </tbody>
-    </table>    
-  </div>
-  <div id="units-display">1,2,3,4,5</div>
-  <div>NextStake : <span> 14</span></div>
-  
-  <hr>
-  <div id="display">
-  </div>
-  <div >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      input {
+        width: 50px;
+      }
+      #info-box-1 {
+        display: flex;
+        justify-content: space-between;
+      }
+      #units-display {
+        width: 80;
+        text-align: center;
+        border: 1px solid black;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .form-element {
+        color: green;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info-box-1">
+      <div>Initial units : <span id="initial-units"></span></div>
+      <div>Target profit : <span id="target-profit-display">0</span></div>
+    </div>
+    <div id="dead-games">
+      <table>
+        <thead>
+          <tr>
+            <th>Game#</th>
+            <th>Stake</th>
+            <th>Odd</th>
+            <th>Outcome</th>
+            <th>Profit</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>2</td>
+            <td>pending</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="units-display">1,2,3,4,5</div>
+    <div>NextStake : <span id="next-stake-display"> 14</span></div>
+
+    <hr />
+    <div id="display"></div>
+    <div>
       <h3>controls</h3>
       <div class="form-element">
-        nextStake 
+        nextStake
         <input id="nextStake_input" type="text" placeholder="2,4,3" />
         <button onclick="setNextStakeFromInput()">set nextStake</button>
       </div>
-      <hr>
+      <hr />
       <button onclick="stake()">stake</button>
-      <hr>
+      <hr />
       <button onclick="won()">won</button>
       <button onclick="lost()">lost</button>
-      <hr>
+      <hr />
       <div class="form-element">
         set new Odd
-        <input id="newOdd-input" type="text" placeholder="2.0"/>
+        <input id="newOdd-input" type="text" placeholder="2.0" />
         <button onclick="setNewOdd()">set set new odd</button>
       </div>
       <div class="form-element">
-        ggg
-        <input id="initial-stake-input" type="text" value="1,2,3" placeholder="1,2,2,3,4,5"/>
+        <input
+          id="initial-stake-input"
+          type="text"
+          value="1,2,3"
+          placeholder="1,2,2,3,4,5"
+        />
         <button onclick="setInitialUnits()">set initial units</button>
       </div>
-      
-      <hr>
+
+      <hr />
       <button onclick="removeData()">reset/clear data</button>
     </div>
-  <script src="./main.js"></script>
-</body>
+    <script src="./main.js"></script>
+  </body>
 </html>

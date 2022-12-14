@@ -7,6 +7,8 @@ const newOddInput = document.querySelector("#newOdd-input");
 const initialUnits_dom = document.querySelector("#initial-units");
 const initialUnits_input = document.querySelector("#initial-stake-input");
 const targetProfitDisplay = document.querySelector("#target-profit-display");
+const unitsDisplay = document.querySelector("#units-display");
+const nextStakeDisplay = document.querySelector("#next-stake-display");
 
 let data = getSavedData();
 // console.log(data);
@@ -212,6 +214,8 @@ function render() {
 
   initialUnits_dom.innerText = initialUnits;
   targetProfitDisplay.innerText = getTargetProfit();
+  unitsDisplay.innerText = units;
+  nextStakeDisplay.innerText = nextStake;
 }
 render();
 
