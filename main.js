@@ -9,6 +9,7 @@ const initialUnits_input = document.querySelector("#initial-stake-input");
 const targetProfitDisplay = document.querySelector("#target-profit-display");
 const unitsDisplay = document.querySelector("#units-display");
 const nextStakeDisplay = document.querySelector("#next-stake-display");
+const processInfo = document.querySelector("#process-info");
 
 let data = getSavedData();
 // console.log(data);
@@ -289,3 +290,56 @@ function removeData() {
   localStorage.removeItem("customBetdata");
   location.reload();
 }
+
+async function saveOnline() {
+  processInfo.innerText = "saving... data online";
+  const url = "https://online-storage.up.railway.app/api/v1/data/";
+  const config = {
+    url,
+    data: {
+      id: "customBetdata",
+      name: "data",
+      value: localStorage.getItem("customBetdata"),
+    },
+    method: "POST",
+  };
+
+  try {
+    const response = await axios(config);
+    const data = response.data;
+
+    processInfo.innerText = "synced to online database";
+  } catch (error) {
+    if (error.request) {
+      processInfo.innerText = "no internet connection";
+    }
+
+    processInfo.innerText = error.message;
+  }
+}
+
+// saveOnline();
+
+async function syncToLocal() {
+  processInfo.innerText = "Sync... to local";
+  const url = "https://online-storage.up.railway.app/api/v1/data/customBetdata";
+
+  try {
+    const response = await axios.get(url);
+    let data = response.data;
+
+    data = data.data.value;
+    localStorage.setItem("customBetdata", data);
+
+    processInfo.innerText = "Synced to local";
+  } catch (error) {
+    if (error.request) {
+      processInfo.innerText = "no internet connection";
+      return;
+    }
+
+    processInfo.innerText = error.message;
+  }
+}
+
+// syncToLocal();
