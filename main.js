@@ -1,5 +1,4 @@
 /** @format */
-
 const display_dom = document.querySelector("#display");
 const nextStake_input = document.querySelector("#nextStake_input");
 const tbody = document.querySelector("#tbody");
@@ -29,7 +28,7 @@ let deadGames = data && data.deadGames.length > 0 ? data.deadGames : [];
 let profit = data ? data.profit : 0;
 let targetProfit = 0;
 
-function setNextStakeFromInput() {
+function selectUnits() {
   const values = nextStake_input.value.split(",");
 
   const convertedArray = values.map((value) => {
@@ -124,7 +123,9 @@ function calcProfit() {
   const totalWonStakes = getTotalStakeAmounts(wonGames);
   const totalStakes = getTotalStakeAmounts(deadGames);
 
-  return odd * totalWonStakes - totalStakes;
+  let result = odd * totalWonStakes - totalStakes;
+  result = result.toFixed(2) * 1;
+  return result;
 }
 
 function getTargetProfit() {
