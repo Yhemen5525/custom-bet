@@ -1,7 +1,7 @@
 /** @format */
 const display_dom = document.querySelector("#display");
 const nextStake_input = document.querySelector("#nextStake_input");
-const deadGamesTbody = document.querySelector("#dead-games-tbody");
+const expiredBetSlipsTbody = document.querySelector("#expired-bet-slips-tbody");
 const liveGameTbody = document.querySelector("#live-game-tbody");
 const newOddInput = document.querySelector("#newOdd-input");
 const initialUnits_dom = document.querySelector("#initial-units");
@@ -12,7 +12,6 @@ const nextStakeDisplay = document.querySelector("#next-stake-display");
 const processInfo = document.querySelector("#process-info");
 
 let data = getSavedData();
-console.log(data);
 
 let odd = data ? data.odd : 2;
 let initialUnits =
@@ -25,8 +24,9 @@ let stakeAmount = data ? data.stakeAmount : 0;
 let recoverList = data && data.recoverList > 0 ? data.recoverList : [];
 let wonGames = data && data.wonGames.length > 0 ? data.wonGames : [];
 let lostGames = data && data.lostGames.length > 0 ? data.lostGames : [];
-let deadGames = data && data.deadGames.length > 0 ? data.deadGames : [];
-let profit = data ? data.profit : 0;
+let expiredBetSlips =
+  data && data.expiredBetSlips.length > 0 ? data.expiredBetSlips : [];
+let overAllProfit = data ? data.overAllProfit : 0;
 let targetProfit = 0;
 let liveGame = data ? data.liveGame : {};
 
@@ -121,10 +121,10 @@ function won() {
   wonGames.push(game);
 
   //adding game profit
-  deadGames.push(game);
-  profit = calcProfit();
+  expiredBetSlips.push(game);
+  overAllProfit = calcProfit();
 
-  wonGames[wonGames.length - 1].profit = profit;
+  wonGames[wonGames.length - 1].profit = overAllProfit;
 
   units = removeUnits(units, recoverList);
   nextStake = "?";
@@ -154,10 +154,10 @@ function lost() {
     gameOutcome,
   };
   lostGames.push(game);
-  deadGames.push(game);
-  profit = calcProfit();
+  expiredBetSlips.push(game);
+  overAllProfit = calcProfit();
 
-  lostGames[lostGames.length - 1].profit = profit;
+  lostGames[lostGames.length - 1].profit = overAllProfit;
 
   units.push(stakeAmount);
   nextStake = "?";
@@ -175,7 +175,7 @@ clearLiveGameTbody();
 
 function calcProfit() {
   const totalWonStakes = getTotalStakeAmounts(wonGames);
-  const totalStakes = getTotalStakeAmounts(deadGames);
+  const totalStakes = getTotalStakeAmounts(expiredBetSlips);
 
   let result = odd * totalWonStakes - totalStakes;
   result = result.toFixed(2) * 1;
@@ -209,7 +209,7 @@ function setNewOdd() {
     return;
   }
 
-  if (deadGames.length == 0) {
+  if (expiredBetSlips.length == 0) {
     odd = value;
   } else {
     alert("sorry,can't new odd ,you have an online bet");
@@ -220,7 +220,7 @@ function setNewOdd() {
 }
 
 function setInitialUnits() {
-  if (!(deadGames.length < 1)) {
+  if (!(expiredBetSlips.length < 1)) {
     alert(
       "sorry, you have an on going bet, can't reassign unitialUnits now. clear data and try again"
     );
@@ -244,7 +244,7 @@ function setInitialUnits() {
 }
 
 function render() {
-  deadGamesTbody.innerHTML = "";
+  expiredBetSlipsTbody.innerHTML = "";
   display_dom.innerText = JSON.stringify({
     units,
     recoverList,
@@ -253,11 +253,11 @@ function render() {
     isBetStaked,
     stakeAmount,
     gameOutcome,
-    profit,
+    overAllProfit,
   });
 
   let content = "";
-  deadGames.forEach((deadGame, index) => {
+  expiredBetSlips.forEach((deadGame, index) => {
     content += `<tr>
       <td>${index + 1}</td>
       <td>${deadGame.stakeAmount}</td>
@@ -267,7 +267,7 @@ function render() {
     </tr>`;
   });
 
-  deadGamesTbody.innerHTML = content;
+  expiredBetSlipsTbody.innerHTML = content;
 
   initialUnits_dom.innerText = initialUnits;
   targetProfitDisplay.innerText = getTargetProfit();
@@ -329,9 +329,9 @@ function saveData() {
     recoverList,
     wonGames,
     lostGames,
-    deadGames,
+    expiredBetSlips,
     liveGame,
-    profit,
+    overAllProfit,
   };
   data = JSON.stringify(data);
   localStorage.setItem("customBetdata", data);
@@ -354,6 +354,13 @@ function removeData() {
 }
 
 async function saveOnline() {
+  const confirm = prompt(
+    "if you really want to SAVE_DATA_TO_ONLINE , types 'yes"
+  ).trim();
+  if (confirm == "" || confirm != "yes") {
+    return (processInfo.innerText = "operation aborted");
+  }
+
   processInfo.innerText = "saving... data online";
   const url = "https://online-storage.up.railway.app/api/v1/data/";
   const config = {
@@ -383,6 +390,13 @@ async function saveOnline() {
 // saveOnline();
 
 async function syncToLocal() {
+  const confirm = prompt(
+    "if you really want to SyncToLocalStorage , types 'yes"
+  ).trim();
+  if (confirm == "" || confirm != "yes") {
+    return (processInfo.innerText = "operation aborted");
+  }
+
   processInfo.innerText = "Sync... to local";
   const url = "https://online-storage.up.railway.app/api/v1/data/customBetdata";
 
