@@ -1,7 +1,8 @@
 /** @format */
 const display_dom = document.querySelector("#display");
 const nextStake_input = document.querySelector("#nextStake_input");
-const tbody = document.querySelector("#tbody");
+const deadGamesTbody = document.querySelector("#dead-games-tbody");
+const liveGameTbody = document.querySelector("#live-game-tbody");
 const newOddInput = document.querySelector("#newOdd-input");
 const initialUnits_dom = document.querySelector("#initial-units");
 const initialUnits_input = document.querySelector("#initial-stake-input");
@@ -11,7 +12,7 @@ const nextStakeDisplay = document.querySelector("#next-stake-display");
 const processInfo = document.querySelector("#process-info");
 
 let data = getSavedData();
-// console.log(data);
+console.log(data);
 
 let odd = data ? data.odd : 2;
 let initialUnits =
@@ -27,6 +28,7 @@ let lostGames = data && data.lostGames.length > 0 ? data.lostGames : [];
 let deadGames = data && data.deadGames.length > 0 ? data.deadGames : [];
 let profit = data ? data.profit : 0;
 let targetProfit = 0;
+let liveGame = data ? data.liveGame : {};
 
 function selectUnits() {
   const values = nextStake_input.value.split(",");
@@ -53,18 +55,57 @@ function setNextStake() {
 }
 
 function stake() {
+  let value = nextStake_input.value;
+  value = value.trim();
+
+  if (value == 0 || nextStake == 0) {
+    alert("you can't place an empty bet, input select units first");
+    return;
+  }
+
+  if (isNaN(nextStake)) {
+    alert("invalid nextstake value '?' ,input select units first");
+    return;
+  }
+
   isBetStaked = true;
   stakeAmount = nextStake;
   gameOutcome = "pending";
+  let profit = "?";
+
+  let game = {
+    stakeAmount,
+    odd,
+    gameOutcome,
+    profit,
+  };
+
+  liveGame = game;
+
+  setLiveGameTbody(liveGame);
 
   stakeAmount = nextStake;
   //removeUnits(units,recoverList)
-
+  saveData();
   render();
 }
 
+function setLiveGameTbody(liveGame) {
+  liveGameTbody.innerHTML = `<tr>
+  <td>${1}</td>
+  <td>${liveGame.stakeAmount}</td>
+  <td>${liveGame.odd}</td>
+  <td>${liveGame.gameOutcome}</td>
+  <td>${liveGame.profit}</td>
+  </tr>`;
+}
+
 function won() {
-  stake();
+  if (!liveGame.gameOutcome) {
+    alert("sorry, you haven't stake a bet yet");
+    return;
+  }
+
   gameOutcome = "won";
 
   if (isString(nextStake)) {
@@ -93,7 +134,11 @@ function won() {
 }
 
 function lost() {
-  stake();
+  if (!liveGame.gameOutcome) {
+    alert("sorry, you haven't stake a bet yet");
+    return;
+  }
+
   gameOutcome = "lost";
 
   if (isString(nextStake)) {
@@ -118,6 +163,11 @@ function lost() {
 
   saveData();
 }
+
+function clearLiveGameTbody(liveGame) {
+  liveGameTbody.innerHTML = "you have not stake a bet / game yet";
+}
+clearLiveGameTbody();
 
 function calcProfit() {
   const totalWonStakes = getTotalStakeAmounts(wonGames);
@@ -161,6 +211,7 @@ function setNewOdd() {
     alert("sorry,can't new odd ,you have an online bet");
   }
   saveData();
+  alert(`odd set too ${odd}`);
   location.reload();
 }
 
@@ -189,7 +240,7 @@ function setInitialUnits() {
 }
 
 function render() {
-  tbody.innerHTML = "";
+  deadGamesTbody.innerHTML = "";
   display_dom.innerText = JSON.stringify({
     units,
     recoverList,
@@ -212,12 +263,15 @@ function render() {
     </tr>`;
   });
 
-  tbody.innerHTML = content;
+  deadGamesTbody.innerHTML = content;
 
   initialUnits_dom.innerText = initialUnits;
   targetProfitDisplay.innerText = getTargetProfit();
   unitsDisplay.innerText = units;
   nextStakeDisplay.innerText = nextStake;
+  if (liveGame.gameOutcome) {
+    setLiveGameTbody(liveGame);
+  }
 }
 render();
 
@@ -270,6 +324,7 @@ function saveData() {
     wonGames,
     lostGames,
     deadGames,
+    liveGame,
     profit,
   };
   data = JSON.stringify(data);
