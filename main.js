@@ -128,6 +128,8 @@ function won() {
 
   units = removeUnits(units, recoverList);
   nextStake = "?";
+
+  liveGame = {};
   render();
 
   saveData();
@@ -159,12 +161,14 @@ function lost() {
 
   units.push(stakeAmount);
   nextStake = "?";
+
+  liveGame = {};
   render();
 
   saveData();
 }
 
-function clearLiveGameTbody(liveGame) {
+function clearLiveGameTbody() {
   liveGameTbody.innerHTML = "you have not stake a bet / game yet";
 }
 clearLiveGameTbody();
@@ -271,6 +275,8 @@ function render() {
   nextStakeDisplay.innerText = nextStake;
   if (liveGame.gameOutcome) {
     setLiveGameTbody(liveGame);
+  } else {
+    clearLiveGameTbody();
   }
 }
 render();
