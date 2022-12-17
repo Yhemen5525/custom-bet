@@ -10,6 +10,9 @@ const targetProfitDisplay = document.querySelector("#target-profit-display");
 const unitsDisplay = document.querySelector("#units-display");
 const nextStakeDisplay = document.querySelector("#next-stake-display");
 const processInfo = document.querySelector("#process-info");
+const amountToRebetInput = document.querySelector("#amount-to-rebet-input");
+const compoundingStatus_dom = document.querySelectorAll(".compounding-status");
+const overallProfit_dom = document.querySelector("#overall-profit");
 
 let data = getSavedData();
 
@@ -29,6 +32,8 @@ let expiredBetSlips =
 let overAllProfit = data ? data.overAllProfit : 0;
 let targetProfit = 0;
 let liveGame = data ? data.liveGame : {};
+let isCompoundBettingEnbled = data ? data.isCompoundBettingEnbled : false;
+let percentageToRebet = data ? data.percentageToRebet : 0;
 
 function selectUnits() {
   const values = nextStake_input.value.split(",");
@@ -44,7 +49,14 @@ function selectUnits() {
 
   recoverList = convertedArray;
 
-  nextStake = getArraySum(recoverList) / (odd - 1);
+  if (isCompoundBettingEnbled && overAllProfit > 0) {
+    nextStake =
+      (getArraySum(recoverList) + percentageToRebet * overAllProfit) /
+      (odd - 1);
+  } else {
+    nextStake = getArraySum(recoverList) / (odd - 1);
+  }
+
   nextStake = nextStake.toFixed(2) * 1;
 
   render();
@@ -243,6 +255,54 @@ function setInitialUnits() {
   location.reload();
 }
 
+function enableCompoundBetting() {
+  let value = amountToRebetInput.value;
+  value = value * 1;
+  if (isNaN(value)) {
+    alert("bad input");
+    return;
+  }
+
+  if (value == 0) {
+    alert("zero is not allowed");
+    return;
+  }
+
+  isCompoundBettingEnbled = !isCompoundBettingEnbled;
+
+  if (isCompoundBettingEnbled == false) {
+    percentageToRebet = 0;
+    alert("compound betting disabled");
+
+    render();
+    return;
+  }
+
+  targetProfitDisplay.innerText = "infite";
+
+  percentageToRebet = value;
+  alert("Success,Compound betting Enabled");
+
+  saveData();
+  render();
+}
+
+function showCompoundingStatus() {
+  if (isCompoundBettingEnbled) {
+    compoundingStatus_dom.forEach((e) => {
+      e.innerText = "Enabled";
+      e.classList.remove("disabled");
+      e.classList.add("enabled");
+    });
+  } else {
+    compoundingStatus_dom.forEach((e) => {
+      e.innerText = "Disabled";
+      e.classList.remove("enabled");
+      e.classList.add("disabled");
+    });
+  }
+}
+
 function render() {
   expiredBetSlipsTbody.innerHTML = "";
   display_dom.innerText = JSON.stringify({
@@ -254,6 +314,8 @@ function render() {
     stakeAmount,
     gameOutcome,
     overAllProfit,
+    percentageToRebet,
+    isCompoundBettingEnbled,
   });
 
   let content = "";
@@ -278,6 +340,8 @@ function render() {
   } else {
     clearLiveGameTbody();
   }
+  showCompoundingStatus();
+  overallProfit_dom.innerText = overAllProfit;
 }
 render();
 
@@ -332,6 +396,8 @@ function saveData() {
     expiredBetSlips,
     liveGame,
     overAllProfit,
+    isCompoundBettingEnbled,
+    percentageToRebet,
   };
   data = JSON.stringify(data);
   localStorage.setItem("customBetdata", data);

@@ -103,6 +103,21 @@
         font-size: 1.2em;
         border-radius: 10%;
       }
+      .enabled {
+        background: rgb(150, 233, 108);
+        color: rgb(21, 118, 14);
+        padding: 3px;
+        border-radius: 5%;
+      }
+      .disabled {
+        background: rgb(239, 149, 164);
+        color: rgb(194, 39, 39);
+        padding: 3px;
+        border-radius: 5%;
+      }
+      #compounding-profit {
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -112,6 +127,11 @@
       </div>
       <div>Target profit : <span id="target-profit-display">0</span></div>
     </div>
+    <div id="compounding-profit">
+      Actual Profit made = Target Profit + Compounding Profit =
+      <span id="overall-profit">0</span>
+    </div>
+
     <div class="table-container">
       <h3 class="table-heading">Expired BetSlips</h3>
       <table>
@@ -152,7 +172,12 @@
     <hr />
     <div id="display"></div>
     <div>
-      <h3>controls</h3>
+      <h3>Controls</h3>
+      <h3>
+        compound betting status :
+        <span class="compounding-status">Enabled</span>
+      </h3>
+
       <div class="form-element">
         <input id="nextStake_input" type="text" placeholder="2,4,3" />
         <button onclick="selectUnits()">select units</button>
@@ -176,6 +201,15 @@
           placeholder="1,2,2,3,4,5"
         />
         <button onclick="setInitialUnits()">set initial units</button>
+      </div>
+      <div class="form-element">
+        <h3>
+          compound betting status :
+          <span class="compounding-status">Enabled</span>
+        </h3>
+        Percentage of overall profit to always rebet
+        <input id="amount-to-rebet-input" type="text" placeholder="0.01" />
+        <button onclick="enableCompoundBetting()">Enable/Disable</button>
       </div>
 
       <hr />
