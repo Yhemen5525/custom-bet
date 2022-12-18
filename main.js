@@ -13,6 +13,7 @@ const processInfo = document.querySelector("#process-info");
 const amountToRebetInput = document.querySelector("#amount-to-rebet-input");
 const compoundingStatus_dom = document.querySelectorAll(".compounding-status");
 const overallProfit_dom = document.querySelector("#overall-profit");
+const lastLostAmount_dom = document.querySelector("#last-lost-amount");
 
 let data = getSavedData();
 
@@ -34,6 +35,9 @@ let targetProfit = 0;
 let liveGame = data ? data.liveGame : {};
 let isCompoundBettingEnbled = data ? data.isCompoundBettingEnbled : false;
 let percentageToRebet = data ? data.percentageToRebet : 0;
+let lastLostAmount = data ? data.lastLostAmount : 0;
+
+lastLostAmount_dom.innerText = lastLostAmount;
 
 function selectUnits() {
   const values = nextStake_input.value.split(",");
@@ -165,6 +169,10 @@ function lost() {
     odd,
     gameOutcome,
   };
+
+  lastLostAmount = stakeAmount;
+  lastLostAmount_dom.innerText = lastLostAmount;
+
   lostGames.push(game);
   expiredBetSlips.push(game);
   overAllProfit = calcProfit();
@@ -398,6 +406,7 @@ function saveData() {
     overAllProfit,
     isCompoundBettingEnbled,
     percentageToRebet,
+    lastLostAmount,
   };
   data = JSON.stringify(data);
   localStorage.setItem("customBetdata", data);

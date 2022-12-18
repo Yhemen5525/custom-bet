@@ -41,7 +41,7 @@
         width: 50vw;
       }
 
-      #next-stake-display {
+      .color-text {
         color: steelblue;
         font-size: 1.5rem;
       }
@@ -167,7 +167,6 @@
       Units
       <div id="units-display"></div>
     </div>
-    <div>NextStake : <span id="next-stake-display"></span></div>
 
     <hr />
     <div id="display"></div>
@@ -177,6 +176,16 @@
         compound betting status :
         <span class="compounding-status">Enabled</span>
       </h3>
+
+      <div>
+        <div>
+          NextStake : <span id="next-stake-display" class="color-text"></span>
+        </div>
+        <div>
+          Aw! , You just lost :
+          <span id="last-lost-amount" class="color-text"></span>
+        </div>
+      </div>
 
       <div class="form-element">
         <input id="nextStake_input" type="text" placeholder="2,4,3" />
