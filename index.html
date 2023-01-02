@@ -11,16 +11,16 @@
     <style>
       body {
         padding: 2px;
+        text-align: center;
       }
       input {
+        width: 150px;
+      }
+    
+      [id="newOdd-input"]{
         width: 50px;
       }
-      [id="nextStake_input"] {
-        width: 150px;
-      }
-      [id="initial-stake-input"] {
-        width: 150px;
-      }
+
 
       #info-box-1 {
         display: flex;
@@ -103,21 +103,34 @@
         font-size: 1.2em;
         border-radius: 10%;
       }
-      .enabled {
-        background: rgb(150, 233, 108);
-        color: rgb(21, 118, 14);
-        padding: 3px;
-        border-radius: 5%;
-      }
-      .disabled {
-        background: rgb(239, 149, 164);
-        color: rgb(194, 39, 39);
-        padding: 3px;
-        border-radius: 5%;
+      
+      .hide {
+        display: none;
       }
       #compounding-profit {
         text-align: center;
       }
+
+      
+      button {
+        margin-bottom: 20px;
+      }
+      
+      #stake-btn {
+        background: steelblue;
+        color: white;
+      }
+      #lost-btn {
+        background: lightpink;
+        color: white;
+      }
+      
+      #won-btn {
+        background: lightgreen;
+        color: white;
+        margin-right: 20px;
+      }
+      
     </style>
   </head>
   <body>
@@ -192,13 +205,18 @@
         <button onclick="selectUnits()">select units</button>
       </div>
       <hr />
-      <button onclick="stake()">stake</button>
+      <button id="stake-btn" onclick="stake()">stake</button>
+       <br/>
+      <button id="won-btn" onclick="won()">won</button>
+      <button id="lost-btn" onclick="lost()">lost</button>
       <hr />
-      <button onclick="won()">won</button>
-      <button onclick="lost()">lost</button>
-      <hr />
+      
+      <div id="controls">
+        
+      
+      
       <div class="form-element">
-        set new Odd
+        <h3> set new Odd </h3> <br/>
         <input id="newOdd-input" type="text" placeholder="2.0" />
         <button onclick="setNewOdd()">set set new odd</button>
       </div>
@@ -213,15 +231,14 @@
       </div>
       <div class="form-element">
         <h3>
-          compound betting status :
-          <span class="compounding-status">Enabled</span>
+          update units :
         </h3>
-        Percentage of overall profit to always rebet
-        <input id="amount-to-rebet-input" type="text" placeholder="0.01" />
-        <button onclick="enableCompoundBetting()">Enable/Disable</button>
+        
+        <input id="update-units-input" type="text" placeholder="0.1,0.1,1,2,3" />
+        <button onclick="updateUnits()">update units</button>
       </div>
+      
 
-      <hr />
       <div id="process-info">processinfo</div>
       <button class="online-action-btn" onclick="saveOnline()">
         saveOnline
@@ -231,6 +248,13 @@
       </button>
       <button id="reset-button" onclick="removeData()">reset/clear data</button>
     </div>
+
+    </div>
+    
+    
+    
+    <button onclick="hideOrShow()">hide/show</button>
+
     <script src="./main.js"></script>
   </body>
 </html>
